@@ -1,3 +1,49 @@
+// Global inventory array
+let inventory = [];
+
+// Add products
+function addProduct(id, name, price, quantity) {
+ let product = {
+  id: id,
+  name: name,
+  price: price,
+  quantity: quantity,
+ }
+ // Validate inputs
+ if(!id || !name || price <= 0 || quantity < 0) {
+  console.log("Invalid product data please check all fields.")
+  return false;
+ }
+ // Check if product id already exists
+ for (let i = 0; i < inventory.length; i++) {
+  if (inventory[i].id === id) {
+    console.log("product with this ID already exists.")
+    return false
+  }   
+ }
+    inventory.push(product);
+    console.log(`${name} added to inventory`)
+
+};
+
+// function to display all [roducts
+function displayInventory() {
+  console.log("Current Inventory");
+  for (let i = 0; i < inventory.length; i++) {
+    let product = inventory[i];
+    console.log(`ID ${product.id}, Name: ${product.name}  Price: ${product.price} Qiantity: ${product.quantity}`)
+;    }
+}
+
+// products
+addProduct(1001, "Laptop", 700,  20)
+addProduct(1002,  "Mouse",  200,  15)
+addProduct(1003,  "Keyboard",  400, 7)
+addProduct(1004,  "Monitor",  900, 9)
+addProduct(1001, "Tablet",  500, 8)
+addProduct(1007, "Tablet",  0, 0)
+
+displayInventory();
 function removeProduct(name) {
   for (let i = 0; i < inventory.length; i++) {
     if (inventory[i].name == name) {
