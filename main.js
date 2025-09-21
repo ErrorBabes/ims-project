@@ -25,8 +25,15 @@ function addProduct(id, name, price, quantity) {
     console.log(`${name} added to inventory`)
 
 };
+// products
+addProduct(1001, "Laptop", 700, 20);
+addProduct(1002, "Mouse", 200, 15);
+addProduct(1003, "Keyboard", 400, 7);
+addProduct(1004, "Monitor", 900, 9);
+addProduct(1001, "Tablet", 500, 8);
 
-// function to display all [roducts
+
+// function to display all [products]
 function displayInventory() {
   console.log("Current Inventory");
   for (let i = 0; i < inventory.length; i++) {
@@ -35,15 +42,11 @@ function displayInventory() {
 ;    }
 }
 
-// products
-addProduct(1001, "Laptop", 700,  20)
-addProduct(1002,  "Mouse",  200,  15)
-addProduct(1003,  "Keyboard",  400, 7)
-addProduct(1004,  "Monitor",  900, 9)
-addProduct(1001, "Tablet",  500, 8)
-addProduct(1007, "Tablet",  0, 0)
-
 displayInventory();
+
+
+
+
 function removeProduct(name) {
   for (let i = 0; i < inventory.length; i++) {
     if (inventory[i].name == name) {
@@ -51,30 +54,13 @@ function removeProduct(name) {
       return;
     }
   }
-  console.log(`${name} doesnot exist in inventory`);
+  console.log(`${name} does not exist in inventory`);
 }
 
-removeProduct("apple");
+removeProduct("laptop");
 removeProduct("bag");
 console.log("Your inventory after removing items: ", inventory, "\n");
 
-function updateNewStock(name, quantity) {
-    for (item of inventory){
-        if (item.productName == name){
-            item.quantity += quantity;
-            console.log(`Stock for ${name} has been updated. New quantity: ${item.quantity}`);
-            return;
-        }
-    }
-    console.log(`${name} does not exist in inventory`);
-
-}
-
-updateNewStock("Amazing Crackers", 50);
-updateNewStock("Mixed Fruits", 30);
-updateNewStock("Pineapple Juice", 20);
-console.log("The update of inventory is ", inventory, "\n");
-console.log("\n");
 
 function updateNewStock(name, quantity) {
     for (item of inventory){
@@ -98,11 +84,31 @@ const generateReportSummary = () => {
   let totalProducts = inventory.length;
   let totalValue = 0;
 
+  let lowStock = [];
+
   for (let i = 0; i < inventory.length; i++) {
     totalValue += inventory[i].price * inventory[i].quantity;
+
+    let product = inventory[i];
+
+    //Determining of product quantity is low
+    if (product.productQuantity < 10) {
+      lowStock.push(product.productName);
+      console.log(
+        ` Low stock alert for product ${product.productName}! with ${product.productQuantity} quantity`
+      );
+    }
   }
 
-  console.log("\nInventory Summary");
+  console.log("\n ****** Inventory Summary ******");
+
+  //list(s) of low stock items
+  if (lowStock.length > 0) {
+    console.log(` low Stock Products: ${lowStock.join(",")} \n\n`);
+  }
+
   console.log("Total number of products:", totalProducts);
   console.log("Total inventory value:", totalValue, "\n");
 };
+
+generateReportSummary();
