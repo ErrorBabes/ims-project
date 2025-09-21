@@ -20,8 +20,7 @@ const generateReportSummary = () => {
     totalValue += inventory[i].price * inventory[i].quantity;
   }
 
-  console.log("\n=== Inventory Summary ===");
+  console.log("\nInventory Summary");
   console.log("Total number of products:", totalProducts);
-  console.log("Total inventory value:", totalValue);
-  console.log("========================\n");
+  console.log("Total inventory value:", totalValue, "\n");
 };
