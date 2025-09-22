@@ -62,23 +62,35 @@ removeProduct("bag");
 console.log("Your inventory after removing items: ", inventory, "\n");
 
 
-function updateNewStock(name, quantity) {
-    for (item of inventory){
-        if (item.productName == name){
-            item.quantity += quantity;
-            console.log(`Stock for ${name} has been updated. New quantity: ${item.quantity}`);
-            return;
+function updateStock(productName, quantity, action) {
+  for (let i = 0; i < inventory.length; i++) {
+    if (inventory[i].productName === productName.toLowerCase()) {
+      if (action === "add") {
+        inventory[i].productQuantity += quantity;
+        console.log(
+          `${quantity} added to ${inventory[i].productName}. New quantity: ${inventory[i].productQuantity}`
+        );
+      } else if (action === "remove") {
+        if (inventory[i].productQuantity >= quantity) {
+          inventory[i].productQuantity -= quantity;
+          console.log(
+            ` ${quantity} removed from ${inventory[i].productName}. New quantity: ${inventory[i].productQuantity}`
+          );
+        } else {
+          console.log(
+            `Cannot remove ${quantity}, we have ${inventory[i].productQuantity} in stock.`
+          );
         }
+      } else {
+        console.log(" Invalid action. Use 'add' or 'remove'.");
+      }
     }
-    console.log(`${name} does not exist in inventory`);
-
-}
-
-updateNewStock("Amazing Crackers", 50);
-updateNewStock("Mixed Fruits", 30);
-updateNewStock("Pineapple Juice", 20);
-console.log("The update of inventory is ", inventory, "\n");
-console.log("\n");
+  }
+ 
+  console.log(`No product found with name "${productName}"`);
+};
+ 
+updateStock("fish", 20, "add");
 
 const generateReportSummary = () => {
   let totalProducts = inventory.length;
