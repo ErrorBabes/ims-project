@@ -9,6 +9,16 @@ function addProduct(id, name, price, quantity) {
   price: price,
   quantity: quantity,
  }
+
+ //If item doesn't have id, generate one
+ if (!id) {
+    if (inventory.length === 0) {
+      id = 1001; 
+    } else {
+      id = inventory[inventory.length - 1].id + 1;
+    }
+  }
+ 
  // Validate inputs
  if(!id || !name || price <= 0 || quantity < 0) {
   console.log("Invalid product data please check all fields.")
@@ -57,9 +67,10 @@ function removeProduct(name) {
   console.log(`${name} does not exist in inventory`);
 }
 
-removeProduct("laptop");
+removeProduct("Laptop");
 removeProduct("bag");
-console.log("Your inventory after removing items: ", inventory, "\n");
+console.log("\n","Your inventory after removing items: ");
+displayInventory();
 
 
 function updateStock(productName, quantity, action) {
