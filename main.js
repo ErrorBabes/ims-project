@@ -2,134 +2,127 @@
 let inventory = [];
 
 // Add products
-function addProduct(id, name, price, quantity) {
- let product = {
-  id: id,
-  name: name,
-  price: price,
-  quantity: quantity,
- }
+function addProduct(name, price, quantity) {
+  // Validate inputs
+  if (!name || price <= 0 || quantity < 0) {
+    console.log("Invalid product data, please check all fields.");
+    return false;
+  }
 
- //If item doesn't have id, generate one
- if (!id) {
-    if (inventory.length === 0) {
-      id = 1001; 
-    } else {
-      id = inventory[inventory.length - 1].id + 1;
+  // Check if product name already exists
+  for (let i = 0; i < inventory.length; i++) {
+    if (inventory[i].name.toLowerCase() === name.toLowerCase()) {
+      console.log("Product with this name already exists.");
+      return false;
     }
   }
- 
- // Validate inputs
- if(!id || !name || price <= 0 || quantity < 0) {
-  console.log("Invalid product data please check all fields.")
-  return false;
- }
- // Check if product id already exists
- for (let i = 0; i < inventory.length; i++) {
-  if (inventory[i].id === id) {
-    console.log("product with this ID already exists.")
-    return false
-  }   
- }
-    inventory.push(product);
-    console.log(`${name} added to inventory`)
 
-};
-// products
-addProduct(1001, "Laptop", 700, 20);
-addProduct(1002, "Mouse", 200, 15);
-addProduct(1003, "Keyboard", 400, 7);
-addProduct(1004, "Monitor", 900, 9);
-addProduct(1001, "Tablet", 500, 8);
+  const product = {
+    id: inventory.length + 1,
+    name: name,
+    price: price,
+    quantity: quantity,
+  };
 
+  inventory.push(product);
+  console.log(`${name} added to inventory`);
+}
 
-// function to display all [products]
+// Adding products
+addProduct("Laptop", 700, 20);
+addProduct("Mouse", 200, 15);
+addProduct("Keyboard", 400, 7);
+addProduct("Monitor", 900, 9);
+addProduct("Tablet", 500, 8);
+
+// Display inventory
 function displayInventory() {
-  console.log("Current Inventory");
+  console.log("\nCurrent Inventory:");
   for (let i = 0; i < inventory.length; i++) {
     let product = inventory[i];
-    console.log(`ID ${product.id}, Name: ${product.name}  Price: ${product.price} Qiantity: ${product.quantity}`)
-;    }
+    console.log(
+      `ID ${product.id}, Name: ${product.name}, Price: ${product.price}, Quantity: ${product.quantity}`
+    );
+  }
 }
 
 displayInventory();
 
-
-
-
+// Remove product by name
 function removeProduct(name) {
   for (let i = 0; i < inventory.length; i++) {
-    if (inventory[i].name == name) {
+    if (inventory[i].name.toLowerCase() === name.toLowerCase()) {
       inventory.splice(i, 1);
+      console.log(`${name} removed from inventory`);
       return;
     }
   }
   console.log(`${name} does not exist in inventory`);
 }
 
+// Remove some products
 removeProduct("Laptop");
-removeProduct("bag");
-console.log("\n","Your inventory after removing items: ");
+removeProduct("Bag");
+console.log("\nInventory after removing items:");
 displayInventory();
 
-
-function updateStock(productName, quantity, action) {
+// Update stock
+function updateStock(name, quantity, action) {
   for (let i = 0; i < inventory.length; i++) {
-    if (inventory[i].productName === productName.toLowerCase()) {
+    if (inventory[i].name.toLowerCase() === name.toLowerCase()) {
       if (action === "add") {
-        inventory[i].productQuantity += quantity;
+        inventory[i].quantity += quantity;
         console.log(
-          `${quantity} added to ${inventory[i].productName}. New quantity: ${inventory[i].productQuantity}`
+          `${quantity} added to ${inventory[i].name}. New quantity: ${inventory[i].quantity}`
         );
       } else if (action === "remove") {
-        if (inventory[i].productQuantity >= quantity) {
-          inventory[i].productQuantity -= quantity;
+        if (inventory[i].quantity >= quantity) {
+          inventory[i].quantity -= quantity;
           console.log(
-            ` ${quantity} removed from ${inventory[i].productName}. New quantity: ${inventory[i].productQuantity}`
+            `${quantity} removed from ${inventory[i].name}. New quantity: ${inventory[i].quantity}`
           );
         } else {
           console.log(
-            `Cannot remove ${quantity}, we have ${inventory[i].productQuantity} in stock.`
+            `Cannot remove ${quantity}, only ${inventory[i].quantity} in stock.`
           );
         }
       } else {
-        console.log(" Invalid action. Use 'add' or 'remove'.");
+        console.log("Invalid action. Use 'add' or 'remove'.");
       }
+      return; // stop loop after updating
     }
   }
- 
-  console.log(`No product found with name "${productName}"`);
-};
- 
-updateStock("fish", 20, "add");
 
+  console.log(`No product found with name "${name}"`);
+}
+
+// Test updateStock
+updateStock("Fish", 20, "add");
+updateStock("Monitor", 5, "remove");
+
+// Generate inventory summary
 const generateReportSummary = () => {
   let totalProducts = inventory.length;
   let totalValue = 0;
-
   let lowStock = [];
 
   for (let i = 0; i < inventory.length; i++) {
-    totalValue += inventory[i].price * inventory[i].quantity;
-
     let product = inventory[i];
+    totalValue += product.price * product.quantity;
 
-    //Determining of product quantity is low
-    if (product.productQuantity < 10) {
-      lowStock.push(product.productName);
+    // Check low stock
+    if (product.quantity < 10) {
+      lowStock.push(product.name);
       console.log(
-        ` Low stock alert for product ${product.productName}! with ${product.productQuantity} quantity`
+        `Low stock alert: ${product.name} has only ${product.quantity} items`
       );
     }
   }
 
-  console.log("\n ****** Inventory Summary ******");
-
-  //list(s) of low stock items
+  console.log("\n****** Inventory Summary ******");
   if (lowStock.length > 0) {
-    console.log(` low Stock Products: ${lowStock.join(",")} \n\n`);
+    console.log(`Low Stock Products: ${lowStock.join(", ")}\n`);
   }
-
   console.log("Total number of products:", totalProducts);
   console.log("Total inventory value:", totalValue, "\n");
 };
